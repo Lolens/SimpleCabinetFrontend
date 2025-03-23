@@ -28,7 +28,7 @@ function onMaskClick(e) {
             <slot name="footer">
               <div class="modal-default-actions">
                  <button class="modal-close-button" @click="$emit('close')">Close</button>
-                 <button class="modal-default-button" @click="$emit('apply')">{{ text }}</button>
+                 <button class="modal-default-button" @click="$emit('apply')" v-if="text">{{ text }}</button>
               </div>
             </slot>
           </div>

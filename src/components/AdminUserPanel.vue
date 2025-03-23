@@ -5,19 +5,12 @@ import Dropdown from './ui/Dropdown.vue';
 import { computed, ref } from 'vue';
 import SudoService from '@/services/sudo-service';
 import { useAuthStore } from '@/stores/auth';
+import UserGroupManagementModal from './modals/admin/UserGroupManagementModal.vue';
 var props = defineProps(['user'])
 var authStore = useAuthStore()
-var actions = ref([
-    {
-        check() {
-            return true;
-        },
-        async run() {
-            await SudoService.sudo(props.user.id);
-        },
-        text: "Login as user"
-    }
-]);
+async function runSudo() {
+    await SudoService.sudo(props.user.id);
+}
 </script>
 <template>
     <Dropdown>
@@ -25,13 +18,15 @@ var actions = ref([
             <FontAwesomeIcon :icon="faBars" class="adminpanel-icon"></FontAwesomeIcon>
         </template>
         <template #content>
-            <div v-for="action in actions.filter(e => e.check())" class="adminpanel-action" @click="action.run()">
-                {{ action.text }}
+            <div class="adminpanel-action" v-if="user.id != authStore.user.id" @click="runSudo">
+                Login as user
             </div>
+            <UserGroupManagementModal :user="user">
+            </UserGroupManagementModal>
         </template>
     </Dropdown>
 </template>
-<style scoped>
+<style>
 .adminpanel-action {
     color: var(--colors-red);
     cursor: pointer;

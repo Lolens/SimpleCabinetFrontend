@@ -46,7 +46,17 @@ export const useAuthStore = defineStore('auth', () => {
     user.value.assets[name] = data;
   }
   function hasRole(role) {
-    return computed(() => user.value ? user.value.groups[role] : false)
+    return computed(() => {
+      if(!user.value) {
+        return false;
+      }
+      for(var g of user.value.groups) {
+        if(g.groupName == role) {
+          return true;
+        }
+      }
+      return false;
+    })
   }
 
   return { user, accessToken, refreshToken, expireDate, update, reset, fetchFromStorage, isTokenExpired, updateAsset, hasRole }
