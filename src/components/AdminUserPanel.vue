@@ -6,6 +6,7 @@ import { computed, ref } from 'vue';
 import SudoService from '@/services/sudo-service';
 import { useAuthStore } from '@/stores/auth';
 import UserGroupManagementModal from './modals/admin/UserGroupManagementModal.vue';
+import UserMoneyManagementModal from './modals/admin/UserMoneyManagementModal.vue';
 var props = defineProps(['user'])
 var authStore = useAuthStore()
 async function runSudo() {
@@ -23,6 +24,9 @@ async function runSudo() {
             </div>
             <UserGroupManagementModal :user="user">
             </UserGroupManagementModal>
+            <UserMoneyManagementModal :user="user">
+                
+            </UserMoneyManagementModal>
         </template>
     </Dropdown>
 </template>
