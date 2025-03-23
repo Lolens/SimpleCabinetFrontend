@@ -1,6 +1,7 @@
 import { useAuthStore } from "@/stores/auth";
 import RequestService from "./request-service";
 import { useRouter } from "vue-router";
+import { useBackupAuthStore } from "@/stores/backupAuth";
 
 export default class AuthService {
     static _promiseResolve = null;
@@ -17,6 +18,7 @@ export default class AuthService {
             totpPassword: totpCode
         });
         var store = useAuthStore();
+        store.update(null, authData);
         var userData = await AuthService.fetchUserInfo();
         store.update(userData, authData);
     }

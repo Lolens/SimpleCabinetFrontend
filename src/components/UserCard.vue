@@ -9,6 +9,8 @@ import Enable2FaModal from './modals/Enable2FaModal.vue';
 import Disable2FaModal from './modals/Disable2FaModal.vue';
 import ChangePasswordModal from './modals/ChangePasswordModal.vue';
 import { useAuthStore } from '@/stores/auth';
+import Dropdown from './ui/Dropdown.vue';
+import AdminUserPanel from './AdminUserPanel.vue';
 const authStore = useAuthStore();
 const props = defineProps(['user', 'owner'])
 const skin = computed(() => { return props.user ? props.user.assets.skin : null });
@@ -48,12 +50,14 @@ if(props.owner) {
         securityInfo.value = e;
     }))
 }
+var isAdmin = authStore.hasRole('ADMIN');
 </script>
 <template>
     <div class="card">
         <div class="card-header">
             <AvatarHead :skin="skin" class="avatar"></AvatarHead>
             <span class="username">{{ user.username }}</span>
+            <AdminUserPanel class="usercard-adminpanel" :user="user" v-if="isAdmin"></AdminUserPanel>
         </div>
         <div>
             {{ user.status }}
@@ -131,5 +135,8 @@ if(props.owner) {
 .asset-management {
     display: flex;
     gap: 10px;
+}
+.usercard-adminpanel {
+    margin-left: auto;
 }
 </style>

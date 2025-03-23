@@ -4,13 +4,17 @@ import { RouterLink, RouterView } from 'vue-router'
 import AuthService from './services/auth-service';
 import { useAuthStore } from './stores/auth';
 import Logo from '@/assets/logo.svg'
+import SudoService from './services/sudo-service';
+import { useBackupAuthStore } from './stores/backupAuth';
 var authAvailable = computed(() => store.user == null);
 var logoutAvailable = computed(() => store.user != null);
 var store = useAuthStore();
+var backupAuthStore = useBackupAuthStore();
 onMounted(() => {
   AuthService.wait().then(() => {
 
   });
+  SudoService.load();
 });
 var title = ref(import.meta.env.VITE_PROJECT_NAME)
 </script>
@@ -29,6 +33,7 @@ var title = ref(import.meta.env.VITE_PROJECT_NAME)
         <RouterLink to="/auth" v-if="authAvailable">Auth</RouterLink>
         <RouterLink to="/register" v-if="authAvailable">Register</RouterLink>
         <RouterLink to="/debug/logout" v-if="logoutAvailable">Log Out</RouterLink>
+        <a @click="SudoService.unsudo()" v-if="backupAuthStore.accessToken != null" class="admin-action">Exit from sudo</a>
       </div>
     </div>
   </header>
@@ -77,5 +82,13 @@ header {
 
 .content a:hover {
   color: var(--colors-text-action);
+}
+.admin-action {
+  cursor: pointer;
+  opacity: 0.6;
+  color: var(--colors-red) !important;
+}
+.admin-action:hover {
+  opacity: 1;
 }
 </style>

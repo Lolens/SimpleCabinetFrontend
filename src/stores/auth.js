@@ -25,6 +25,7 @@ export const useAuthStore = defineStore('auth', () => {
     accessToken.value = localStorage.getItem('accessToken');
     refreshToken.value = localStorage.getItem('refreshToken');
     expireDate.value = localStorage.getItem('expireToken');
+    RequestService.accessToken = accessToken.value;
   }
 
   function isTokenExpired() {
@@ -44,6 +45,9 @@ export const useAuthStore = defineStore('auth', () => {
   function updateAsset(name, data) {
     user.value.assets[name] = data;
   }
+  function hasRole(role) {
+    return computed(() => user.value ? user.value.groups[role] : false)
+  }
 
-  return { user, accessToken, refreshToken, update, reset, fetchFromStorage, isTokenExpired, updateAsset }
+  return { user, accessToken, refreshToken, expireDate, update, reset, fetchFromStorage, isTokenExpired, updateAsset, hasRole }
 })
