@@ -43,7 +43,7 @@ async function onClick() {
   <button @click="showModal = true">Create</button>
   <modal text="Create" :show="showModal" @apply="onClick" @close="showModal = false">
     <template #header>
-      <h3>Header</h3>
+      <h3>Create ItemProduct</h3>
     </template>
     <template #body>
       <div class="form">
@@ -80,7 +80,7 @@ async function onClick() {
         <input type="text" v-model="currency" placeholder="Currency">
       </div>
       <div class="form">
-        <AdminUpload @uploaded="pictureName = event.name"></AdminUpload>
+        <AdminUpload @uploaded="pictureName = $event.name"></AdminUpload>
       </div>
     </template>
   </modal>
