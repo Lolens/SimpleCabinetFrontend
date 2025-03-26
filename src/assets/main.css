@@ -44,26 +44,40 @@ main {
     box-sizing: border-box;
 }
 
-.form input[type=text], .form input[type=password], .form .input-label, .form button {
+.form input[type=text], .form input[type=password], .form .input-label, .form textarea, .form button {
     display: block;
     box-sizing: border-box;
     width: 100%;
 }
 .form input[type=text], .form input[type=password] {
     height: 50px;
+}
+
+.form input[type=text],
+.form input[type=password],
+.form textarea {
     padding-left: 20px;
     border: none;
     border-radius: 10px;
     transition: 0.2s;
 }
 
-.form input[type=text]:focus-visible, .form input[type=password]:focus-visible {
+.form textarea {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.form input[type=text]:focus-visible,
+.form input[type=password]:focus-visible,
+.form textarea:focus-visible {
     border: none;
     outline: none;
     background-color: var(--colors-background-input);
 }
 
-.form input[type=text]:hover::placeholder, .form input[type=password]:hover::placeholder {
+.form input[type=text]:hover::placeholder,
+.form input[type=password]:hover::placeholder,
+.form textarea {
     color: var(--colors-text-primary);
 }
 
