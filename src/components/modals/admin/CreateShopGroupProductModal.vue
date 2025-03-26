@@ -58,7 +58,7 @@ async function onClick() {
         <textarea v-model="description" placeholder="Description"></textarea>
       </div>
       <div class="form">
-        <VMarkdownView mode="light" :context="description"></VMarkdownView>
+        <VMarkdownView mode="light" :content="description"></VMarkdownView>
       </div>
       <div class="form">
         <input type="checkbox" v-model="local">
