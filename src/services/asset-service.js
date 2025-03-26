@@ -22,4 +22,12 @@ export default class AssetService {
             "Content-Type": 'multipart/form-data'
         })
     }
+
+    static async adminUpload(file) {
+        const fd = new FormData();
+        fd.append("file", file)
+        return await RequestService.request('POST', 'admin/upload/simpleupload', fd, {
+            "Content-Type": 'multipart/form-data'
+        })
+    }
 };

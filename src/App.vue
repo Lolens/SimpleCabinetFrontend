@@ -6,6 +6,7 @@ import { useAuthStore } from './stores/auth';
 import Logo from '@/assets/logo.svg'
 import SudoService from './services/sudo-service';
 import { useBackupAuthStore } from './stores/backupAuth';
+import Dropdown from './components/ui/Dropdown.vue';
 var authAvailable = computed(() => store.user == null);
 var logoutAvailable = computed(() => store.user != null);
 var store = useAuthStore();
@@ -30,6 +31,15 @@ var title = ref(import.meta.env.VITE_PROJECT_NAME)
         <RouterLink to="/">Home</RouterLink>
         <RouterLink to="/users">Users</RouterLink>
         <RouterLink to="/cabinet" v-if="logoutAvailable">Cabinet</RouterLink>
+        <Dropdown>
+          <template #header>
+            <a @click="">Shop</a>
+          </template>
+          <template #content>
+            <RouterLink to="/shop/group">Group shop</RouterLink>
+            <RouterLink to="/shop/item">Item shop</RouterLink>
+          </template>
+        </Dropdown>
         <RouterLink to="/auth" v-if="authAvailable">Auth</RouterLink>
         <RouterLink to="/register" v-if="authAvailable">Register</RouterLink>
         <RouterLink to="/debug/logout" v-if="logoutAvailable">Log Out</RouterLink>
@@ -73,13 +83,22 @@ header {
 }
 
 .content>a,
-.title>a {
+.title>a,
+.content>.dropdown>a,
+.content>.dropdown>.dropdown-content>a  {
   font-size: 20px;
   color: inherit;
   text-decoration: none;
   transition: 0.3s;
 }
-
+.content>.dropdown>.dropdown-content>a {
+  display: block;
+  cursor: pointer;
+  padding: 12px 16px;
+}
+.content>.dropdown>.dropdown-content>a:hover {
+    background-color: var(--colors-background-primary);
+}
 .content a:hover {
   color: var(--colors-text-action);
 }

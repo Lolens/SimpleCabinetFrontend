@@ -1,4 +1,5 @@
 <script setup>
+import CreateShopGroupProductModal from "@/components/modals/admin/CreateShopGroupProductModal.vue";
 import GroupShopCard from "@/components/shop/GroupShopCard.vue";
 import RequestService from "@/services/request-service";
 import InfiniteLoading from "v3-infinite-loading";
@@ -32,6 +33,9 @@ watch(search, (newValue) => {
 </script>
 <template>
     <main>
+        <div class="form">
+            <CreateShopGroupProductModal></CreateShopGroupProductModal>
+        </div>
         <div class="form">
             <input type="text" placeholder="Search" v-model="search">
         </div>

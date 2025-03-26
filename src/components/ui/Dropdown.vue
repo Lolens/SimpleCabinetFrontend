@@ -8,7 +8,7 @@
         </div>
     </div>
 </template>
-<style scoped>
+<style>
 .dropdown {
     position: relative;
     display: inline-block;

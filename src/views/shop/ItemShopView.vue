@@ -1,4 +1,5 @@
 <script setup>
+import CreateShopItemProductModal from "@/components/modals/admin/CreateShopItemProductModal.vue";
 import ItemShopCard from "@/components/shop/ItemShopCard.vue";
 import RequestService from "@/services/request-service";
 import InfiniteLoading from "v3-infinite-loading";
@@ -32,6 +33,9 @@ watch(search, (newValue) => {
 </script>
 <template>
     <main>
+        <div class="form">
+            <CreateShopItemProductModal></CreateShopItemProductModal>
+        </div>
         <div class="form">
             <input type="text" placeholder="Search" v-model="search">
         </div>
