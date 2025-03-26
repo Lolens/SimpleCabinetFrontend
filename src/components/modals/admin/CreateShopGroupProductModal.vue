@@ -20,7 +20,7 @@ const price = ref('');
 const currency = ref('DONATE');
 const stackable = ref(false);
 const localName = ref('');
-const pictureName = ref('');
+const picture = ref([]);
 async function run() {
   var response = await RequestService.request('POST', 'shop/group/new', {
     displayName: displayName.value,
@@ -36,7 +36,7 @@ async function run() {
     context: context.value,
     stackable: stackable.value,
     localName: localName.value,
-    pictureName: pictureName.value
+    pictureName: picture.value.name
   });
 }
 async function onClick() {
@@ -93,7 +93,7 @@ async function onClick() {
         <input type="text" v-model="localName" placeholder="Local Name">
       </div>
       <div class="form">
-        <AdminUpload @uploaded="pictureName = $event.name"></AdminUpload>
+        <AdminUpload v-model="picture"></AdminUpload>
       </div>
     </template>
   </modal>

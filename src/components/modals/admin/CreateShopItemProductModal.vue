@@ -18,7 +18,7 @@ const server = ref('');
 //
 const price = ref('');
 const currency = ref('DONATE');
-const pictureName = ref('');
+const picture = ref([]);
 async function run() {
   var response = await RequestService.request('POST', 'shop/item/new', {
     displayName: displayName.value,
@@ -31,7 +31,7 @@ async function run() {
     server: server.value,
     price: price.value,
     currency: currency.value, 
-    pictureName: pictureName.value
+    pictureName: picture.value.name
   });
 }
 async function onClick() {
@@ -80,7 +80,7 @@ async function onClick() {
         <input type="text" v-model="currency" placeholder="Currency">
       </div>
       <div class="form">
-        <AdminUpload @uploaded="pictureName = $event.name"></AdminUpload>
+        <AdminUpload v-model="picture"></AdminUpload>
       </div>
     </template>
   </modal>
