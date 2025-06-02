@@ -17,6 +17,7 @@ onMounted(() => {
   });
   SudoService.load();
 });
+var isAdmin = store.hasRole('ADMIN');
 var title = ref(import.meta.env.VITE_PROJECT_NAME)
 </script>
 
@@ -38,6 +39,14 @@ var title = ref(import.meta.env.VITE_PROJECT_NAME)
           <template #content>
             <RouterLink to="/shop/group">Group shop</RouterLink>
             <RouterLink to="/shop/item">Item shop</RouterLink>
+          </template>
+        </Dropdown>
+        <Dropdown v-if="isAdmin">
+          <template #header>
+            <a @click="">Admin Panel</a>
+          </template>
+          <template #content>
+            <RouterLink to="/admin/group">Groups</RouterLink>
           </template>
         </Dropdown>
         <RouterLink to="/auth" v-if="authAvailable">Auth</RouterLink>
