@@ -34,9 +34,9 @@ export const useBackupAuthStore = defineStore('backupAuth', () => {
     refreshToken.value = null;
     expireDate.value = null;
     user.value = null;
-    localStorage.setItem('secondaryAccessToken', null);
-    localStorage.setItem('secondaryRefreshToken', null);
-    localStorage.setItem('secondaryExpireToken', null);
+    localStorage.removeItem('secondaryAccessToken');
+    localStorage.removeItem('secondaryRefreshToken');
+    localStorage.removeItem('secondaryExpireToken');
   }
 
   return { user, accessToken, refreshToken, expireDate, update, reset, fetchFromStorage, isTokenExpired }

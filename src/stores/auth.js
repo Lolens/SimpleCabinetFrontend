@@ -36,9 +36,9 @@ export const useAuthStore = defineStore('auth', () => {
     refreshToken.value = null;
     expireDate.value = null;
     user.value = null;
-    localStorage.setItem('accessToken', null);
-    localStorage.setItem('refreshToken', null);
-    localStorage.setItem('expireToken', null);
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    localStorage.removeItem('expireToken');
     RequestService.accessToken = null;
   }
 
