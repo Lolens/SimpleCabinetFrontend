@@ -47,7 +47,7 @@ var title = ref(import.meta.env.VITE_PROJECT_NAME)
       </div>
     </div>
   </header>
-
+  <notifications position="bottom center" classes="my-notification" />
   <RouterView />
 </template>
 

@@ -4,19 +4,38 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ref } from 'vue';
 import RequestService from '@/services/request-service';
 import Modal from '@/components/ui/Modal.vue';
+import { useNotification } from "@kyvg/vue3-notification";
+const { notify } = useNotification()
 
 const showModal = ref(false);
 const props = defineProps(['user'])
 const assignGroupName = ref('');
 async function unassignGroup(group) {
-    var response = await RequestService.request('POST', 'group/id/' + group + '/unassign', {
-        userId: props.user.id
-    })
+    try {
+
+        var response = await RequestService.request('POST', 'group/id/' + group + '/unassign', {
+            userId: props.user.id
+        })
+    } catch (err) {
+        notify({
+            title: "Group",
+            text: err,
+            type: 'error',
+        });
+    }
 }
 async function assignGroup(group) {
-    var response = await RequestService.request('POST', 'group/id/' + group + '/assign', {
-        userId: props.user.id
-    })
+    try {
+        var response = await RequestService.request('POST', 'group/id/' + group + '/assign', {
+            userId: props.user.id
+        })
+    } catch (err) {
+        notify({
+            title: "Group",
+            text: err,
+            type: 'error',
+        });
+    }
 }
 </script>
 <template>

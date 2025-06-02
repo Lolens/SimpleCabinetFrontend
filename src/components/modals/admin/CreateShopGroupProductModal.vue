@@ -4,6 +4,8 @@ import Modal from '../../ui/Modal.vue';
 import { computed, ref, watch } from 'vue'
 import { VMarkdownView } from 'vue3-markdown'
 import AdminUpload from '@/components/AdminUpload.vue';
+import { useNotification } from "@kyvg/vue3-notification";
+const { notify } = useNotification()
 
 const showModal = ref(false)
 const displayName = ref('');
@@ -22,22 +24,30 @@ const stackable = ref(false);
 const localName = ref('');
 const picture = ref([]);
 async function run() {
-  var response = await RequestService.request('POST', 'shop/group/new', {
-    displayName: displayName.value,
-    description: description.value,
-    name: name.value,
-    local: local.value,
-    server: server.value,
-    world: world.value,
-    context: context.value,
-    expireDays: expireDays.value,
-    price: price.value,
-    currency: currency.value,
-    context: context.value,
-    stackable: stackable.value,
-    localName: localName.value,
-    pictureName: picture.value.name
-  });
+  try {
+    var response = await RequestService.request('POST', 'shop/group/new', {
+      displayName: displayName.value,
+      description: description.value,
+      name: name.value,
+      local: local.value,
+      server: server.value,
+      world: world.value,
+      context: context.value,
+      expireDays: expireDays.value,
+      price: price.value,
+      currency: currency.value,
+      context: context.value,
+      stackable: stackable.value,
+      localName: localName.value,
+      pictureName: picture.value.name
+    });
+  } catch (err) {
+    notify({
+      title: "Shop",
+      text: err,
+      type: 'error',
+    });
+  }
 }
 async function onClick() {
   await run();

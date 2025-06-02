@@ -2,14 +2,25 @@
 import RequestService from '@/services/request-service';
 import Modal from '../ui/Modal.vue';
 import { computed, ref, watch } from 'vue'
+import { useNotification } from "@kyvg/vue3-notification";
+const { notify } = useNotification()
+
 
 const showModal = ref(false)
 const file = ref(null);
 var code = ref('');
 async function disable2Fa() {
+  try {
     var response = await RequestService.request('GET', 'cabinet/security/disable2fa', {
-        code: code.value
+      code: code.value
     });
+  } catch (err) {
+    notify({
+      title: "2FA",
+      text: err,
+      type: 'error',
+    });
+  }
 }
 async function disable() {
   await disable2Fa();

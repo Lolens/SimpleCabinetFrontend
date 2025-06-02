@@ -2,6 +2,8 @@
 import AuthService from '@/services/auth-service';
 import { ref } from 'vue';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
+import { useNotification } from "@kyvg/vue3-notification";
+const { notify } = useNotification()
 var login = ref("");
 var email = ref("");
 var password = ref("");
@@ -12,7 +14,15 @@ async function updateToken(token, eKey) {
   captchaToken.value = token;
 }
 async function register() {
-  var e = await AuthService.register(login.value, password.value, email.value, captchaToken.value);
+  try {
+    var e = await AuthService.register(login.value, password.value, email.value, captchaToken.value);
+  } catch (err) {
+    notify({
+      title: "Authorization",
+      text: err,
+      type: 'error',
+    });
+  }
 }
 </script>
 

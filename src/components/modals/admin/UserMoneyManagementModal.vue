@@ -4,6 +4,8 @@ import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { ref, watch } from 'vue';
 import RequestService from '@/services/request-service';
 import Modal from '@/components/ui/Modal.vue';
+import { useNotification } from "@kyvg/vue3-notification";
+const { notify } = useNotification()
 
 const showModal = ref(false);
 const props = defineProps(['user'])
@@ -21,10 +23,18 @@ async function transaction() {
         url = 'admin/money/removemoney/byid/'+props.user.id+'/'+transactionCurrency.value;
         value = -transactionValue.value;
     }
+try {
     var response = await RequestService.request('POST', url, {
         count: value,
         comment: transactionComment.value
     })
+  } catch (err) {
+    notify({
+      title: "Money",
+      text: err,
+      type: 'error',
+    });
+  }
     updateBalance();
 }
 async function updateBalance() {

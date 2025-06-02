@@ -2,6 +2,9 @@
 import RequestService from '@/services/request-service';
 import Modal from '../ui/Modal.vue';
 import { computed, ref, watch } from 'vue'
+import { useNotification } from "@kyvg/vue3-notification";
+const { notify } = useNotification()
+
 
 const showModal = ref(false)
 const file = ref(null);
@@ -9,10 +12,18 @@ var newPassword = ref('');
 var confirmPassword = ref('');
 var oldPassword = ref('');
 async function changePassword() {
-  var response = await RequestService.request('GET', 'cabinet/security/disable2fa', {
-        code: code.value
-  });
-  showModal.value = false;
+  try {
+    var response = await RequestService.request('GET', 'cabinet/security/disable2fa', {
+      code: code.value
+    });
+    showModal.value = false;
+  } catch (err) {
+    notify({
+      title: "Change Password",
+      text: err,
+      type: 'error',
+    });
+  }
 }
 </script>
 <template>

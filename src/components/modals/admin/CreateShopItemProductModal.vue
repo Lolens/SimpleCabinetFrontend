@@ -4,6 +4,9 @@ import Modal from '../../ui/Modal.vue';
 import { computed, ref, watch } from 'vue'
 import { VMarkdownView } from 'vue3-markdown'
 import AdminUpload from '@/components/AdminUpload.vue';
+import { useNotification } from "@kyvg/vue3-notification";
+const { notify } = useNotification()
+
 
 const showModal = ref(false)
 const displayName = ref('');
@@ -20,6 +23,7 @@ const price = ref('');
 const currency = ref('DONATE');
 const picture = ref([]);
 async function run() {
+  try {
   var response = await RequestService.request('POST', 'shop/item/new', {
     displayName: displayName.value,
     description: description.value,
@@ -33,6 +37,13 @@ async function run() {
     currency: currency.value, 
     pictureName: picture.value.name
   });
+  } catch (err) {
+    notify({
+      title: "Shop",
+      text: err,
+      type: 'error',
+    });
+  }
 }
 async function onClick() {
   await run();

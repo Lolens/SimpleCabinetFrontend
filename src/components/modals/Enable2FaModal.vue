@@ -4,25 +4,36 @@ import RequestService from '@/services/request-service';
 import Modal from '../ui/Modal.vue';
 import { computed, ref, watch } from 'vue'
 import QrcodeVue from 'qrcode.vue';
+import { useNotification } from "@kyvg/vue3-notification";
+const { notify } = useNotification()
+
 
 const showModal = ref(false)
 const file = ref(null);
 var url = ref('');
 var secret = ref('');
 async function run() {
-    await AuthService.wait();
-    var response = await RequestService.request('POST', 'cabinet/security/prepare2fa', null);
-    url.value = response.uri;
-    secret.value = response.secret;
+  await AuthService.wait();
+  var response = await RequestService.request('POST', 'cabinet/security/prepare2fa', null);
+  url.value = response.uri;
+  secret.value = response.secret;
 }
 async function enable2Fa() {
+  try {
     var response = await RequestService.request('GET', 'cabinet/security/enable2fa', {
-        secret: secret.value,
-        code: code.value
+      secret: secret.value,
+      code: code.value
     });
+  } catch (err) {
+    notify({
+      title: "2FA",
+      text: err,
+      type: 'error',
+    });
+  }
 }
 watch(showModal, (newValue) => {
-  if(newValue) {
+  if (newValue) {
     run();
   }
 })

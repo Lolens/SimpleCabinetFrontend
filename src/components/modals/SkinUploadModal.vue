@@ -2,15 +2,26 @@
 import AssetService from '@/services/asset-service';
 import Modal from '../ui/Modal.vue';
 import { computed, ref } from 'vue'
+import { useNotification } from "@kyvg/vue3-notification";
+const { notify } = useNotification()
+
 const $emit = defineEmits(['uploaded']);
 const showModal = ref(false)
 const file = ref(null);
 const toggleSlim = ref(false);
 const skin = ref(null);
 async function upload() {
-  var response = await AssetService.uploadSkin(file.value.files[0], toggleSlim.value);
-  $emit('uploaded', response);
-  showModal.value = false;
+  try {
+    var response = await AssetService.uploadSkin(file.value.files[0], toggleSlim.value);
+    $emit('uploaded', response);
+    showModal.value = false;
+  } catch (err) {
+    notify({
+      title: "Upload",
+      text: err,
+      type: 'error',
+    });
+  }
 }
 </script>
 <template>
