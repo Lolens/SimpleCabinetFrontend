@@ -5,6 +5,7 @@ import { computed, ref, watch } from 'vue'
 import { VMarkdownView } from 'vue3-markdown'
 import AdminUpload from '@/components/AdminUpload.vue';
 import { useNotification } from "@kyvg/vue3-notification";
+const emit = defineEmits(['created'])
 const { notify } = useNotification()
 
 
@@ -24,19 +25,20 @@ const currency = ref('DONATE');
 const picture = ref([]);
 async function run() {
   try {
-  var response = await RequestService.request('POST', 'shop/item/new', {
-    displayName: displayName.value,
-    description: description.value,
-    itemName: itemName.value,
-    itemExtra: itemExtra.value,
-    itemNbt: itemNbt.value,
-    itemCustom: itemCustom.value,
-    itemQuantity: itemQuantity.value,
-    server: server.value,
-    price: price.value,
-    currency: currency.value, 
-    pictureName: picture.value.name
-  });
+    var response = await RequestService.request('POST', 'shop/item/new', {
+      displayName: displayName.value,
+      description: description.value,
+      itemName: itemName.value,
+      itemExtra: itemExtra.value,
+      itemNbt: itemNbt.value,
+      itemCustom: itemCustom.value,
+      itemQuantity: itemQuantity.value,
+      server: server.value,
+      price: price.value,
+      currency: currency.value,
+      pictureName: picture.value.name
+    });
+    emit('created', response)
   } catch (err) {
     notify({
       title: "Shop",

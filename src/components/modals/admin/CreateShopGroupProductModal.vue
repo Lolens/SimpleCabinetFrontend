@@ -5,6 +5,7 @@ import { computed, ref, watch } from 'vue'
 import { VMarkdownView } from 'vue3-markdown'
 import AdminUpload from '@/components/AdminUpload.vue';
 import { useNotification } from "@kyvg/vue3-notification";
+const emit = defineEmits(['created'])
 const { notify } = useNotification()
 
 const showModal = ref(false)
@@ -41,6 +42,7 @@ async function run() {
       localName: localName.value,
       pictureName: picture.value.name
     });
+    emit('created', response)
   } catch (err) {
     notify({
       title: "Shop",
