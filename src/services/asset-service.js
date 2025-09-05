@@ -3,7 +3,7 @@ import RequestService from "./request-service";
 export default class AssetService {
     static async uploadSkin(file, toggleSlim = false) {
         return AssetService.upload('skin', file, {
-            toggleSlim: toggleSlim
+            modelSlim: toggleSlim
         });
     }
 
