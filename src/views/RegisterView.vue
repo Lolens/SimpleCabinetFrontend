@@ -10,15 +10,22 @@ var password = ref("");
 var confirmPassword = ref("");
 var captchaToken = ref(null);
 var siteKey = ref(import.meta.env.VITE_HCAPTCHA_SITEKEY);
+var router = useRouter();
 async function updateToken(token, eKey) {
   captchaToken.value = token;
 }
 async function register() {
   try {
     var e = await AuthService.register(login.value, password.value, email.value, captchaToken.value);
+    notify({
+      title: "Registration",
+      text: "Registration completed",
+      type: 'success',
+    });
+    router.push('/auth');
   } catch (err) {
     notify({
-      title: "Authorization",
+      title: "Registration",
       text: err,
       type: 'error',
     });
