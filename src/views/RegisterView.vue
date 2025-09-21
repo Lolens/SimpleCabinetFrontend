@@ -1,6 +1,7 @@
 <script setup>
 import AuthService from '@/services/auth-service';
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import VueHcaptcha from '@hcaptcha/vue3-hcaptcha';
 import { useNotification } from "@kyvg/vue3-notification";
 const { notify } = useNotification()
