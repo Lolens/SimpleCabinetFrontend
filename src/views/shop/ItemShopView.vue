@@ -5,6 +5,7 @@ import RequestService from "@/services/request-service";
 import InfiniteLoading from "v3-infinite-loading";
 import "v3-infinite-loading/lib/style.css";
 import { ref, watch } from "vue";
+import { useAuthStore } from '@/stores/auth';
 
 var result = ref(null);
 var search = ref('');
@@ -30,10 +31,12 @@ watch(search, (newValue) => {
     pageId.value = 0;
     loadMore(false);
 })
+const authStore = useAuthStore();
+var isAdmin = authStore.hasRole('ADMIN');
 </script>
 <template>
     <main>
-        <div class="form">
+        <div class="form" v-if="isAdmin">
             <CreateShopItemProductModal></CreateShopItemProductModal>
         </div>
         <div class="form">
