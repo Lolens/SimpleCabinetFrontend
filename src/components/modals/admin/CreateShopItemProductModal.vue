@@ -25,7 +25,7 @@ const currency = ref('DONATE');
 const picture = ref([]);
 async function run() {
   try {
-    var response = await RequestService.request('POST', 'shop/item/new', {
+    var response = await RequestService.request('PUT', 'shop/item/new', {
       displayName: displayName.value,
       description: description.value,
       itemName: itemName.value,

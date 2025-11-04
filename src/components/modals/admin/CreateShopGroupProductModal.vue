@@ -26,7 +26,7 @@ const localName = ref('');
 const picture = ref([]);
 async function run() {
   try {
-    var response = await RequestService.request('POST', 'shop/group/new', {
+    var response = await RequestService.request('PUT', 'shop/group/new', {
       displayName: displayName.value,
       description: description.value,
       name: name.value,
