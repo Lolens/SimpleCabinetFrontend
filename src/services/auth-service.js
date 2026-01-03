@@ -1,94 +1,140 @@
 import { useAuthStore } from "@/stores/auth";
 import RequestService from "./request-service";
-import { useRouter } from "vue-router";
-import { useBackupAuthStore } from "@/stores/backupAuth";
 
 export default class AuthService {
-    static _promiseResolve = null;
-    static _promiseFails = null;
-    static authWait = new Promise(function(resolve, reject){
-        AuthService._promiseResolve = resolve;
-        AuthService._promiseReject = reject;
-    });
-    static authRunned = false;
-    static async authorize(login, password, totpCode = '') {
-        var authData = await RequestService.request('POST', 'auth/authorize', {
-            username: login,
-            password: password,
-            totpPassword: totpCode
-        });
-        var store = useAuthStore();
+  static _authPromise = null;
+  static _authResolved = false;
+  static _authPromiseResolve = null;
+
+  // Упрощенный промис для ожидания аутентификации
+  static get authWait() {
+    if (!this._authPromise) {
+      this._authPromise = new Promise((resolve) => {
+        this._authPromiseResolve = resolve;
+      });
+    }
+    return this._authPromise;
+  }
+
+  static async authorize(login, password, totpCode = "") {
+    try {
+      const authData = await RequestService.request("POST", "auth/authorize", {
+        username: login,
+        password: password,
+        totpPassword: totpCode,
+      });
+      
+      const store = useAuthStore();
+      // Обновляем токены
+      store.update(null, authData);
+      
+      // Немедленно получаем информацию о пользователе
+      const userData = await this.fetchUserInfo();
+      store.update(userData, authData);
+      
+      // Разрешаем промис, если он еще не разрешен
+      if (this._authPromiseResolve && !this._authResolved) {
+        this._authResolved = true;
+        this._authPromiseResolve();
+      }
+      
+      return userData;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  static async authInternal() {
+    const store = useAuthStore();
+    store.fetchFromStorage();
+    
+    if (!store.accessToken) {
+      // Если нет токена, все равно разрешаем промис
+      if (this._authPromiseResolve && !this._authResolved) {
+        this._authResolved = true;
+        this._authPromiseResolve();
+      }
+      return;
+    }
+    
+    try {
+      if (store.isTokenExpired()) {
+        const authData = await this.refreshToken();
         store.update(null, authData);
-        var userData = await AuthService.fetchUserInfo();
+        const userData = await this.fetchUserInfo();
         store.update(userData, authData);
+      } else {
+        const userData = await this.fetchUserInfo();
+        store.update(userData, null);
+      }
+    } catch (error) {
+      console.error("Auth initialization failed:", error);
+      store.reset();
+    } finally {
+      // Всегда разрешаем промис после попытки восстановления сессии
+      if (this._authPromiseResolve && !this._authResolved) {
+        this._authResolved = true;
+        this._authPromiseResolve();
+      }
     }
-    static async register(login, password, email, captcha) {
-        var response = await RequestService.request('POST', 'auth/register', {
-            username: login,
-            password: password,
-            email: email,
-            captcha: captcha
-        })
-        return response;
-    }
+  }
 
-
-    static async fetchUserInfo() {
-        return await RequestService.request('GET', 'auth/userinfo', null);
+  static async wait() {
+    // Если аутентификация уже запущена, ждем существующий промис
+    if (!this._authPromise) {
+      this._authPromise = new Promise((resolve) => {
+        this._authPromiseResolve = resolve;
+      });
+      await this.authInternal();
     }
+    
+    return this._authPromise;
+  }
 
-    static async refreshToken() {
-        var store = useAuthStore();
-        return await RequestService.request('POST', 'auth/refresh', {
-            refreshToken: store.refreshToken
-        });
-    }
+  // Остальные методы остаются без изменений
+  static async register(login, password, email, captcha) {
+    const response = await RequestService.request("POST", "auth/register", {
+      username: login,
+      password: password,
+      email: email,
+      captcha: captcha,
+    });
+    return response;
+  }
 
-    static async logout() {
-        var store = useAuthStore();
-        var response = await RequestService.request('POST', 'auth/logout', {});
-        store.reset();
-    }
+  static async fetchUserInfo() {
+    return await RequestService.request("GET", "auth/userinfo", null);
+  }
 
-    static async authInternal() {
-        var store = useAuthStore();
-        store.fetchFromStorage();
-        if(!store.accessToken) {
-            return;
-        }
-        if(store.isTokenExpired()) {
-            var authData = await AuthService.refreshToken();
-            store.update(null, authData);
-            var userData = await AuthService.fetchUserInfo();
-            store.update(userData, authData);
-        } else {
-            var userData = await AuthService.fetchUserInfo();
-            store.update(userData, null);
-        }
-    }
+  static async refreshToken() {
+    const store = useAuthStore();
+    return await RequestService.request("POST", "auth/refresh", {
+      refreshToken: store.refreshToken,
+    });
+  }
 
-    static async wait() {
-        if(!AuthService.authRunned) {
-            AuthService.authRunned = true;
-            try {
-                await AuthService.authInternal();
-            } catch(e) {
-                console.log(e);
-            }
-            AuthService._promiseResolve("1");
-        }
-        return AuthService.authWait;
+  static async logout() {
+    const store = useAuthStore();
+    try {
+      await RequestService.request("POST", "auth/logout", {});
+    } finally {
+      store.reset();
+      // Сбрасываем состояние аутентификации
+      this._authPromise = null;
+      this._authResolved = false;
+      this._authPromiseResolve = null;
     }
+  }
 
-    static async requireAuthorize(redirect = false) {
-        await AuthService.wait();
-        var store = useAuthStore();
-        if(store.user == null) {
-            if(redirect) {
-                var router = useRouter();
-                router.push('/auth');
-            }
-            throw new RequestService("You are not authorized");
-        }
+  static async requireAuthorize(redirect = false) {
+    await this.wait();
+    const store = useAuthStore();
+    if (store.user == null) {
+      if (redirect) {
+        const router = useRouter();
+        router.push("/auth");
+      }
+      throw new Error("You are not authorized");
     }
+  }
 }

@@ -5,11 +5,11 @@
 <template>
   <main class="card-container">
     <div class="card">
-      <h1>Внимание!</h1>
-      <p>Для входа в лаунчер и пользования сайтом нужно войти в аккаунт.</p>
+      <h1>404 - Страница не найдена</h1>
+      <p>Увы :(</p>
       <div class="actions">
-        <router-link to="/register" class="btn">Регистрация</router-link>
-        <router-link to="/auth" class="btn">Вход</router-link>
+        <router-link to="/cabinet" class="btn">Вернуться в кабинет</router-link>
+        <router-link to="/" class="btn">На главную</router-link>
       </div>
     </div>
   </main>

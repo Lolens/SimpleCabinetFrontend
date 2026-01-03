@@ -25,7 +25,7 @@ async function loadMore(needCheck) {
     pageId.value = pageId.value + 1;
 }
 async function go(user) {
-    router.push('/users/by/id/' + user.id)
+    router.push('/admin/users/by/id/' + user.id)
 }
 loadMore(false);
 watch(search, (newValue) => {

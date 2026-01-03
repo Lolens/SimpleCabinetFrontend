@@ -59,8 +59,44 @@ async function register() {
     </div>
   </main>
 </template>
+
 <style scoped>
 .auth-card {
   min-width: 400px;
+}
+
+.form {
+  margin-bottom: 0.25rem;
+}
+
+input {
+  width: 100% !important;
+  padding: 0.5rem !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+}
+
+input:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+button {
+  width: 100%;
+  padding: 0.75rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled) {
+  background-color: #0056b3;
 }
 </style>
