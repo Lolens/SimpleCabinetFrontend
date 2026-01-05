@@ -11,41 +11,50 @@ import ChangePasswordModal from "./modals/ChangePasswordModal.vue";
 import { useAuthStore } from "@/stores/auth";
 import Dropdown from "./ui/Dropdown.vue";
 import AdminUserPanel from "./AdminUserPanel.vue";
+
 const authStore = useAuthStore();
 const props = defineProps(["user", "owner"]);
+
+// Безопасное получение skin и cape
 const skin = computed(() => {
-  return props.user ? props.user.assets.skin : null;
+  if (!props.user || !props.user.assets) return null;
+  return props.user.assets.skin || null;
 });
+
 const cape = computed(() => {
-  return props.user ? props.user.assets.cape : null;
+  if (!props.user || !props.user.assets) return null;
+  return props.user.assets.cape || null;
 });
+
+
 const dateTimeFormat = new Intl.DateTimeFormat();
 var playerinfo = ref([
   {
     name: "ID",
-    value: computed(() => props.user.id),
+    value: computed(() => props.user ? props.user.id : null),
   },
   {
     name: "UUID",
-    value: computed(() => props.user.uuid),
+    value: computed(() => props.user ? props.user.uuid : null),
   },
   {
     name: "Gender",
-    value: computed(() => props.user.gender),
+    value: computed(() => props.user ? props.user.gender : null),
   },
   {
     name: "Reputation",
-    value: computed(() => props.user.reputation),
+    value: computed(() => props.user ? props.user.reputation : null),
   },
   {
     name: "Registration Date",
     value: computed(() =>
-      props.user.registrationDate
+      props.user && props.user.registrationDate
         ? dateTimeFormat.format(Date.parse(props.user.registrationDate))
         : null
     ),
   },
 ]);
+
 var balance = ref(null);
 if (props.owner) {
   RequestService.request("GET", "cabinet/money/balance/page/0", null).then(
@@ -54,16 +63,19 @@ if (props.owner) {
     }
   );
 }
+
 var securityInfo = ref(null);
 if (props.owner) {
   RequestService.request("GET", "cabinet/security/info", null).then((e) => {
     securityInfo.value = e;
   });
 }
+
 var isAdmin = authStore.hasRole("ADMIN");
 </script>
+
 <template>
-  <div class="card">
+  <div class="card" v-if="user">
     <div class="card-header">
       <AvatarHead :skin="skin" class="avatar"></AvatarHead>
       <span class="username">{{ user.username }}</span>
@@ -73,7 +85,7 @@ var isAdmin = authStore.hasRole("ADMIN");
         v-if="isAdmin"
       ></AdminUserPanel>
     </div>
-    <div>
+    <div v-if="user.status">
       {{ user.status }}
     </div>
     <div class="card-separate">
@@ -96,7 +108,7 @@ var isAdmin = authStore.hasRole("ADMIN");
             <span class="playerinfo-value">{{ p.value }}</span>
           </div>
         </div>
-        <div v-if="user">
+        <div v-if="user.groups && user.groups.length > 0">
           <h2>Groups</h2>
           <div v-for="p in user.groups">
             <span class="playerinfo-group">{{ p.groupName }}</span>
@@ -122,6 +134,7 @@ var isAdmin = authStore.hasRole("ADMIN");
     </div>
   </div>
 </template>
+
 <style scoped>
 .avatar {
   width: 32px;

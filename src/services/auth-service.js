@@ -103,7 +103,19 @@ export default class AuthService {
   }
 
   static async fetchUserInfo() {
-    return await RequestService.request("GET", "auth/userinfo", null);
+    const response = await RequestService.request("GET", "auth/userinfo", null);
+
+    return {
+    id: response.id,
+    username: response.username,
+    uuid: response.uuid,
+    gender: response.gender,
+    reputation: response.reputation,
+    status: response.status,
+    registrationDate: response.registrationDate,
+    groups: response.groups || [],
+    assets: response.textures || {} 
+  };
   }
 
   static async refreshToken() {
