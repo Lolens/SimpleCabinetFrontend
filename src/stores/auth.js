@@ -45,16 +45,13 @@ export const useAuthStore = defineStore("auth", () => {
   function updateAsset(name, data) {
     if (!user.value) return;
 
-    // Инициализируем assets, если их нет
-    if (!user.value.assets) {
-      user.value.assets = {};
+    if (!user.value.textures) {
+      user.value.textures = {};
     }
 
-    // Обновляем конкретный ассет
-    user.value.assets[name] = data;
+    user.value.textures[name] = data;
 
-    // Для отладки
-    console.log(`Asset ${name} updated:`, data);
+    console.log(`Texture ${name} updated:`, data);
     console.log("Updated user:", user.value);
   }
 

@@ -17,13 +17,13 @@ const props = defineProps(["user", "owner"]);
 
 // Безопасное получение skin и cape
 const skin = computed(() => {
-  if (!props.user || !props.user.assets) return null;
-  return props.user.assets.skin || null;
+  if (!props.user || !props.user.textures) return null;
+  return props.user.textures.skin || null;
 });
 
 const cape = computed(() => {
-  if (!props.user || !props.user.assets) return null;
-  return props.user.assets.cape || null;
+  if (!props.user || !props.user.textures) return null;
+  return props.user.textures.cape || null;
 });
 
 

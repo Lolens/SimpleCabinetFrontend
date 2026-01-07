@@ -10,6 +10,6 @@ RequestService.request('GET', 'users/id/'+route.params.id+"?assets=true", null).
 </script>
 <template>
     <main class="card-container">
-        <user-card :user="user" :owner="false" v-if="user"></user-card>
+        <UserCard :user="user" :owner="false" v-if="user"></UserCard>
     </main>
 </template>
