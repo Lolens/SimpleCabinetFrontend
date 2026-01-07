@@ -114,7 +114,7 @@ export default class AuthService {
     status: response.status,
     registrationDate: response.registrationDate,
     groups: response.groups || [],
-    textures: response.textures || {} 
+    assets: response.assets || {} 
   };
   }
 

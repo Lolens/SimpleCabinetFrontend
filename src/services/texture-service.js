@@ -1,11 +1,11 @@
 import RequestService from "./request-service";
 
-export default class TextureService {
+export default class AssetService {
 
-  static async getMyTextures() {
+  static async getMyAssets() {
     const res = await RequestService.request(
       "GET",
-      "textures/my",
+      "assets/my",
       null
     );
     return res.data;
@@ -26,7 +26,7 @@ export default class TextureService {
 
     const res = await RequestService.request(
       "POST",
-      `textures/upload/${type}`,
+      `assets/upload/${type}`,
       fd
     );
 
@@ -36,7 +36,7 @@ export default class TextureService {
   static async delete(type) {
     return RequestService.request(
       "DELETE",
-      `textures/${type}`,
+      `assets/${type}`,
       null
     );
   }

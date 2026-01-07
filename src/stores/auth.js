@@ -45,11 +45,11 @@ export const useAuthStore = defineStore("auth", () => {
   function updateAsset(name, data) {
     if (!user.value) return;
 
-    if (!user.value.textures) {
-      user.value.textures = {};
+    if (!user.value.assets) {
+      user.value.assets = {};
     }
 
-    user.value.textures[name] = data;
+    user.value.assets[name] = data;
 
     console.log(`Texture ${name} updated:`, data);
     console.log("Updated user:", user.value);

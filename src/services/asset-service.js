@@ -18,7 +18,7 @@ export default class AssetService {
 
     return RequestService.request(
       "POST",
-      "textures/upload",
+      "assets/upload",
       fd
     );
   }

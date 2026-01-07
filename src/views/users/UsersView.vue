@@ -44,7 +44,7 @@ watch(search, (newValue) => {
     <div class="user-minicard-container">
       <div class="card user-minicard" v-for="user in users" @click="go(user)">
         <div class="card-header">
-          <AvatarHead class="avatar" :skin="user.textures ? user.textures.skin : null"></AvatarHead>
+          <AvatarHead class="avatar" :skin="user.assets ? user.assets.skin : null"></AvatarHead>
           <span class="card-username">{{ user.username }}</span>
         </div>
       </div>
